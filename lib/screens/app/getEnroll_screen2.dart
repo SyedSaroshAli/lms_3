@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:lms/color/colors.dart';
+import 'package:lms/screens/app/getEnroll_screen3.dart';
 import 'package:lms/screens/app/paymentConfirmation_screen.dart';
 import 'package:lms/widgets/buttonWidget.dart';
 import 'package:lms/widgets/paymentMethod_tile.dart';
@@ -10,9 +13,15 @@ class PaymentMethodScreen extends StatefulWidget {
 }
 
 class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
+  TextEditingController nameOnCardController = TextEditingController();
+  TextEditingController cardNumberController = TextEditingController();
+  TextEditingController cvcNumberController = TextEditingController();
+  TextEditingController expiryDateController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   int _currentStep = 1;
   int selectedIndex = -1; // Initially no selection
   int paymentDetails = -1;
+  int index = -1;
 
   final List<String> paymentMethods = [
     "EasyPaisa",
@@ -49,6 +58,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
     double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -130,23 +140,147 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                   const SizedBox(height: 5),
 
                   // Payment Methods List
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: paymentMethods.length,
-                      itemBuilder: (context, index) {
-                        return SelectableContainer(
-                          text: paymentMethods[index],
-                          isSelected: selectedIndex == index,
-                          onTap: () {
-                            setState(() {
-                              selectedIndex = index; // Change selected index
-                              paymentDetails = index;
-                            });
-                          },
-                        );
-                      },
-                    ),
-                  ),
+                  index == -1
+                      ? Expanded(
+                          child: ListView.builder(
+                            itemCount: paymentMethods.length,
+                            itemBuilder: (context, index) {
+                              return SelectableContainer(
+                                text: paymentMethods[index],
+                                isSelected: selectedIndex == index,
+                                onTap: () {
+                                  setState(() {
+                                    selectedIndex =
+                                        index; // Change selected index
+                                    paymentDetails = index;
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        )
+                      : Container(),
+
+                  index == 1
+                      ? Expanded(
+                          child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: AppColors.containerColor),
+                                width: double.infinity,
+                                child: TextFormField(
+                                  controller: nameOnCardController,
+                                  validator: (value) {
+                                    if (value == null || value.trim().isEmpty) {
+                                      return 'Name on Card is required';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(18),
+                                      hintText: "Name on Card",
+                                      enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide.none),
+                                      focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide.none)),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: AppColors.containerColor),
+                                width: double.infinity,
+                                child: TextFormField(
+                                  controller: cardNumberController,
+                                  validator: (value) {
+                                    if (value == null || value.trim().isEmpty) {
+                                      return 'Card Number is required';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(18),
+                                      hintText: "Card Number",
+                                      enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide.none),
+                                      focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide.none)),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          color: AppColors.containerColor),
+                                      child: TextFormField(
+                                        controller: cvcNumberController,
+                                        validator: (value) {
+                                          if (value == null ||
+                                              value.trim().isEmpty) {
+                                            return 'CVC Number is required';
+                                          }
+                                          return null;
+                                        },
+                                        decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(18),
+                                            hintText: "CVC Number",
+                                            enabledBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide.none),
+                                            focusedBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide.none)),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          color: AppColors.containerColor),
+                                      child: TextFormField(
+                                        validator: (value) {
+                                          if (value == null ||
+                                              value.trim().isEmpty) {
+                                            return 'Expiry Date is required';
+                                          }
+                                          return null;
+                                        },
+                                        controller: expiryDateController,
+                                        decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(18),
+                                            hintText: "Expiry Date",
+                                            enabledBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide.none),
+                                            focusedBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide.none)),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ))
+                      : Container()
                 ],
               ),
             ),
@@ -158,7 +292,20 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                 right: width / 16, left: width / 16, bottom: height / 25),
             child: GestureDetector(
               onTap: () {
-                setState(() {});
+                setState(() {
+                  index = selectedIndex;
+                });
+                if (selectedIndex == 1) {
+                  // Validate form when "Add Credit Card" is selected
+                  if (_formKey.currentState!.validate()) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TransactionCompleteScreen(),
+                      ),
+                    );
+                  }
+                }
               },
               child: ButtonWidget(
                 text: "Continue",

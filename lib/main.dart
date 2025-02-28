@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lms/screens/app/courseDetail_screen.dart';
 import 'package:lms/screens/app/getEnroll_screen1.dart';
+import 'package:lms/screens/app/getEnroll_screen3.dart';
 import 'package:lms/screens/app/home_screen.dart';
+import 'package:lms/screens/app/inbox_screen.dart';
 import 'package:lms/screens/app/navigation_screen.dart';
+import 'package:lms/screens/app/profile_screen.dart';
+import 'package:lms/screens/app/settings_screen.dart';
 import 'package:lms/screens/auth/reserPassDone_screen.dart';
 import 'package:lms/screens/auth/resetPass_screen.dart';
 import 'package:lms/screens/auth/signIn_screen.dart';
@@ -26,6 +30,6 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
-        home: OverviewScreen());
+        home: InboxScreen());
   }
 }
