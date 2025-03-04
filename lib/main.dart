@@ -13,13 +13,16 @@ import 'package:lms/screens/app/profile_screen.dart';
 import 'package:lms/screens/app/settings_screen.dart';
 import 'package:lms/screens/auth/reserPassDone_screen.dart';
 import 'package:lms/screens/auth/resetPass_screen.dart';
-import 'package:lms/screens/auth/signIn_screen.dart';
-import 'package:lms/screens/auth/signUp_screen.dart';
+import 'package:lms/screens/auth/login_screen.dart';
+import 'package:lms/screens/auth/signup_screen.dart';
+import 'package:lms/screens/onBoarding/onboarding.dart';
 import 'package:lms/screens/onBoarding/splash_screen.dart';
+import 'package:lms/services/storage_service.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await Supabase.initialize(
       anonKey:
@@ -35,14 +38,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        debugShowCheckedModeBanner: false,
-        getPages: Routes.pages,
-        initialRoute: RoutesNamed.signIn,
-        home: InboxScreen());
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      debugShowCheckedModeBanner: false,
+      getPages: Routes.pages,
+      initialRoute: StorageService.userSession != null
+          ? RoutesNamed.bottomNavBar
+          : RoutesNamed.onboard,
+    );
   }
 }

@@ -390,7 +390,7 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Continue Watching",
+                    "Courses",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,

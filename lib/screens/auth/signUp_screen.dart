@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lms/color/colors.dart';
+import 'package:lms/controllers/auth_controller.dart';
 import 'package:lms/widgets/buttonWidget.dart';
 import 'package:lms/widgets/socialButtonWidget.dart';
 
@@ -12,9 +14,21 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>(); // Form key for validation
-  bool _obscureText = true; // Toggle password visibility
+  AuthController controller = Get.put(AuthController());
+  bool _obscureText1 = true; // Toggle password visibility
+  bool _obscureText2 = true; // Toggle password visibility
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  void submit() {
+    if (_formKey.currentState!.validate()) {
+      controller.signUpWithEmailAndPassword(_emailController.text,
+          _passwordController.text, _nameController.text);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     const SizedBox(height: 5),
                     TextFormField(
-                      controller: _emailController,
+                      controller: _nameController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         contentPadding:
@@ -84,10 +98,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           borderRadius: BorderRadius.circular(13),
                           borderSide: BorderSide(color: AppColors.hintColor),
                         ),
-                        focusedBorder: OutlineInputBorder(
+                        focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(13),
-                          borderSide: BorderSide(
-                              color: AppColors.buttonColor, width: 1.4),
+                          borderSide: BorderSide(color: Colors.red, width: 1.4),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(13),
+                          borderSide: BorderSide(color: Colors.red),
                         ),
                       ),
                       validator: (value) {
@@ -117,6 +134,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           borderRadius: BorderRadius.circular(13),
                           borderSide: BorderSide(color: AppColors.hintColor),
                         ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(13),
+                          borderSide: BorderSide(color: Colors.red, width: 1.4),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(13),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(13),
                           borderSide: BorderSide(
@@ -142,25 +167,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     const SizedBox(height: 5),
                     TextFormField(
                       controller: _passwordController,
-                      obscureText: _obscureText,
+                      obscureText: _obscureText1,
                       decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                         hintText: "Enter your password",
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
-                          icon: Icon(_obscureText
+                          icon: Icon(_obscureText1
                               ? Icons.visibility_off
                               : Icons.visibility),
                           onPressed: () {
                             setState(() {
-                              _obscureText = !_obscureText;
+                              _obscureText1
+                                  ? _obscureText1 = false
+                                  : _obscureText1 = true;
                             });
                           },
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(13),
                           borderSide: BorderSide(color: AppColors.hintColor),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(13),
+                          borderSide: BorderSide(color: Colors.red, width: 1.4),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(13),
+                          borderSide: BorderSide(color: Colors.red),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(13),
@@ -171,8 +206,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Please enter your password";
-                        } else if (value.length < 6) {
-                          return "Password must be at least 6 characters long";
                         }
                         return null;
                       },
@@ -186,26 +219,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     const SizedBox(height: 5),
                     TextFormField(
-                      controller: _passwordController,
-                      obscureText: _obscureText,
+                      controller: _confirmPasswordController,
+                      obscureText: _obscureText2,
                       decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                         hintText: "Confirm your password",
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
-                          icon: Icon(_obscureText
+                          icon: Icon(_obscureText2
                               ? Icons.visibility_off
                               : Icons.visibility),
                           onPressed: () {
                             setState(() {
-                              _obscureText = !_obscureText;
+                              _obscureText2
+                                  ? _obscureText2 = false
+                                  : _obscureText2 = true;
                             });
                           },
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(13),
                           borderSide: BorderSide(color: AppColors.hintColor),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(13),
+                          borderSide: BorderSide(color: Colors.red, width: 1.4),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(13),
+                          borderSide: BorderSide(color: Colors.red),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(13),
@@ -214,10 +257,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
+                        if (value == null ||
+                            value.isEmpty ||
+                            value != _passwordController.text) {
                           return "Please enter your password";
-                        } else if (value.length < 6) {
-                          return "Password must be at least 6 characters long";
                         }
                         return null;
                       },
@@ -236,7 +279,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           "Email: ${_emailController.text}, Password: ${_passwordController.text}");
                     }
                   },
-                  child: ButtonWidget(text: "Sign In"),
+                  child: GestureDetector(onTap: () {
+                    submit();
+                  }, child: Obx(() {
+                    return ButtonWidget(
+                        text: controller.isLoading.value == true
+                            ? "Processing"
+                            : "Sign In");
+                  })),
                 ),
                 SizedBox(
                   height: 20,

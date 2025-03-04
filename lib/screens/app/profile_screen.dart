@@ -28,7 +28,7 @@ class ProfileScreen extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.only(top: 50, left: 15, right: 15),
                   margin: EdgeInsets.only(top: 60),
-                  height: 450,
+                  height: 400,
                   width: double.infinity,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
@@ -45,7 +45,7 @@ class ProfileScreen extends StatelessWidget {
                               Text(
                                 "Sarosh",
                                 style: TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.bold),
+                                    fontSize: 22, fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 "Sarosh",
@@ -72,7 +72,7 @@ class ProfileScreen extends StatelessWidget {
                       Text(
                         "ajk kmamcao comacomcao mc ocmam aocmaocmac cmaocmamom co macm acomaomcom aomco macma mcomoma cm omoam mcomm comom cmaomvk m omvm mfemv mvevmmvcemvmdm vm",
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 15,
                             color: Colors.grey.shade500,
                             fontWeight: FontWeight.w400),
                       ),
@@ -82,7 +82,7 @@ class ProfileScreen extends StatelessWidget {
                       Text(
                         "My Skills",
                         style: TextStyle(
-                            fontSize: 21, fontWeight: FontWeight.bold),
+                            fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 10,

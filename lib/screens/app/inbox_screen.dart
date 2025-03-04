@@ -13,13 +13,11 @@ class InboxScreen extends StatefulWidget {
 class _InboxScreenState extends State<InboxScreen> {
   bool chat = true;
   bool call = false;
+
   @override
   Widget build(BuildContext context) {
-    List buttonText = ["Chat", "Call"];
-
     double width = MediaQuery.of(context).size.width;
 
-    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -33,81 +31,82 @@ class _InboxScreenState extends State<InboxScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  height: 50,
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: Colors.grey.shade400),
+        child: Column(
+          // Changed from Expanded to Column
+          children: [
+            Container(
+              height: 50,
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: Colors.grey.shade400),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.search,
+                    color: Colors.grey.shade400,
                   ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.search,
-                        color: Colors.grey.shade400,
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      cursorColor: AppColors.buttonColor,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(bottom: 16),
+                        enabledBorder:
+                            UnderlineInputBorder(borderSide: BorderSide.none),
+                        focusedBorder:
+                            UnderlineInputBorder(borderSide: BorderSide.none),
+                        errorBorder:
+                            UnderlineInputBorder(borderSide: BorderSide.none),
                       ),
-                      SizedBox(width: 8),
-                      Expanded(
-                          child: TextField(
-                        cursorColor: AppColors.buttonColor,
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.only(bottom: 16),
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide.none),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide.none),
-                            errorBorder: UnderlineInputBorder(
-                                borderSide: BorderSide.none)),
-                      ))
-                    ],
+                    ),
                   ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      chat = true;
+                      call = false;
+                    });
+                  },
+                  child: InboxButtonwidget(
+                      width: width, isSelected: chat, text: " Chat"),
                 ),
-                SizedBox(
-                  height: 20,
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      chat = false;
+                      call = true;
+                    });
+                  },
+                  child: InboxButtonwidget(
+                      width: width, isSelected: call, text: "Call"),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          chat = true;
-                          call = false;
-                        });
-                      },
-                      child: InboxButtonwidget(
-                          width: width, isSelected: chat, text: " Chat"),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          chat = false;
-                          call = true;
-                        });
-                      },
-                      child: InboxButtonwidget(
-                          width: width, isSelected: call, text: "Call"),
-                    ),
-                  ],
-                ),
-                ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return inboxTile(
-                          path: "",
-                          name: "Sarosh",
-                          msg: "d",
-                          time: "sks",
-                          newMessages: 2);
-                    })
               ],
             ),
-          ),
+            SizedBox(height: 20),
+            Expanded(
+              // Used Expanded here instead of inside Padding
+              child: ListView.builder(
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  return inboxTile(
+                      path: "",
+                      name: "Sarosh",
+                      msg: "d",
+                      time: "sks",
+                      newMessages: 2);
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

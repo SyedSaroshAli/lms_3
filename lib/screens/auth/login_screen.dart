@@ -1,20 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/instance_manager.dart';
+import 'package:get/route_manager.dart';
 import 'package:lms/color/colors.dart';
+import 'package:lms/controllers/auth_controller.dart';
+import 'package:lms/routes/routes_named.dart';
 import 'package:lms/widgets/buttonWidget.dart';
 import 'package:lms/widgets/socialButtonWidget.dart';
 
-class SigninScreen extends StatefulWidget {
-  const SigninScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<SigninScreen> createState() => _SigninScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _SigninScreenState extends State<SigninScreen> {
+class _LoginScreenState extends State<LoginScreen> {
+  AuthController controller = Get.put(AuthController());
   final _formKey = GlobalKey<FormState>(); // Form key for validation
   bool _obscureText = true; // Toggle password visibility
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  void submit() {
+    if (_formKey.currentState!.validate()) {
+      controller.login(_emailController.text, _passwordController.text);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +95,8 @@ class _SigninScreenState extends State<SigninScreen> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Please enter your email";
-                        } else if (!RegExp(
-                                r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
-                            .hasMatch(value)) {
-                          return "Enter a valid email address";
                         }
+
                         return null;
                       },
                     ),
@@ -130,8 +139,6 @@ class _SigninScreenState extends State<SigninScreen> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Please enter your password";
-                        } else if (value.length < 6) {
-                          return "Password must be at least 6 characters long";
                         }
                         return null;
                       },
@@ -159,16 +166,15 @@ class _SigninScreenState extends State<SigninScreen> {
                 ),
                 const SizedBox(height: 12),
                 // Login Button (Using ButtonWidget)
-                GestureDetector(
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                      // Perform login action
-                      print(
-                          "Email: ${_emailController.text}, Password: ${_passwordController.text}");
-                    }
-                  },
-                  child: ButtonWidget(text: "Sign In"),
-                ),
+                GestureDetector(onTap: () {
+                  submit();
+                }, child: Obx(() {
+                  return ButtonWidget(
+                      text: controller.isLoading.value == true
+                          ? "Processing"
+                          : "Login");
+                })),
+
                 SizedBox(
                   height: 20,
                 ),
@@ -220,10 +226,15 @@ class _SigninScreenState extends State<SigninScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("Don't have an account? "),
-                    Text("Sign up Here",
-                        style: TextStyle(
-                          color: AppColors.buttonColor,
-                        ))
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(RoutesNamed.signUp);
+                      },
+                      child: Text("Sign up Here",
+                          style: TextStyle(
+                            color: AppColors.buttonColor,
+                          )),
+                    )
                   ],
                 )
               ],

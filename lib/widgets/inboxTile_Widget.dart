@@ -14,13 +14,26 @@ class inboxTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          CircleAvatar(),
+          CircleAvatar(
+            radius: 30,
+          ),
+          SizedBox(
+            width: 10,
+          ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(name),
-              Text(msg),
+              Text(
+                name,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                msg,
+                style: TextStyle(fontSize: 14),
+              ),
             ],
           )
         ],
