@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lms/color/colors.dart';
+import 'package:lms/services/supabase_service.dart';
+import 'package:lms/widgets/image_circle.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  ProfileScreen({super.key});
+
+  final SupabaseService controller = Get.put(SupabaseService());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -16,6 +23,16 @@ class ProfileScreen extends StatelessWidget {
           "Profile",
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
+        actions: [
+          GestureDetector(
+              onTap: () {
+                print(controller.userData);
+              },
+              child: Icon(Icons.edit)),
+          SizedBox(
+            width: 15,
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -26,9 +43,9 @@ class ProfileScreen extends StatelessWidget {
               clipBehavior: Clip.none,
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 50, left: 15, right: 15),
+                  padding:
+                      EdgeInsets.only(top: 50, left: 15, right: 15, bottom: 30),
                   margin: EdgeInsets.only(top: 60),
-                  height: 400,
                   width: double.infinity,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
@@ -42,11 +59,16 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           Column(
                             children: [
-                              Text(
-                                "Sarosh",
-                                style: TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.bold),
-                              ),
+                              Obx(() {
+                                return controller.userData['full_name'] != null
+                                    ? Text(
+                                        controller.userData['full_name'],
+                                        style: TextStyle(
+                                            fontSize: 23,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    : CircularProgressIndicator();
+                              }),
                               Text(
                                 "Sarosh",
                                 style: TextStyle(
@@ -62,27 +84,37 @@ class ProfileScreen extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        "Sarosh",
+                        'About Me',
                         style: TextStyle(
-                            fontSize: 21, fontWeight: FontWeight.bold),
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 2,
                       ),
-                      Text(
-                        "ajk kmamcao comacomcao mc ocmam aocmaocmac cmaocmamom co macm acomaomcom aomco macma mcomoma cm omoam mcomm comom cmaomvk m omvm mfemv mvevmmvcemvmdm vm",
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.grey.shade500,
-                            fontWeight: FontWeight.w400),
-                      ),
+                      Obx(() {
+                        return controller.userData['bio'] != null
+                            ? Text(
+                                controller.userData['bio'],
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey.shade600),
+                              )
+                            : Text(
+                                'Tell about yourself',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey.shade500),
+                              );
+                      }),
                       SizedBox(
                         height: 8,
                       ),
                       Text(
                         "My Skills",
                         style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 10,
@@ -93,7 +125,8 @@ class ProfileScreen extends StatelessWidget {
                               true, // Allows it to take only the necessary space
                           physics:
                               NeverScrollableScrollPhysics(), // Prevents nested scrolling issues
-                          itemCount: 5, // Change dynamically as needed
+                          itemCount: controller.userData['skills']
+                              .length, // Change dynamically as needed
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             mainAxisSpacing: 9,
@@ -108,7 +141,8 @@ class ProfileScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(13),
                               ),
                               child: Center(
-                                child: Text("Adobe"),
+                                child:
+                                    Text(controller.userData['skills'][index]),
                               ),
                             );
                           },
@@ -118,14 +152,12 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  left: 0,
-                  right: 0,
-                  top: 10,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.black,
-                    radius: 50,
-                  ),
-                ),
+                    left: 0,
+                    right: 0,
+                    top: 10,
+                    child: CircleImage(
+                      radius: 50,
+                    )),
               ],
             )
           ],

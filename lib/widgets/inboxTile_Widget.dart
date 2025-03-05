@@ -35,6 +35,11 @@ class inboxTile extends StatelessWidget {
                 style: TextStyle(fontSize: 14),
               ),
             ],
+          ),
+          Column(
+            children: [
+              CircleAvatar(),
+            ],
           )
         ],
       ),

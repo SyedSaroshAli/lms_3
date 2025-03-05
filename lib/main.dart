@@ -11,6 +11,7 @@ import 'package:lms/screens/app/inbox_screen.dart';
 import 'package:lms/screens/app/navigation_screen.dart';
 import 'package:lms/screens/app/profile_screen.dart';
 import 'package:lms/screens/app/settings_screen.dart';
+import 'package:lms/screens/auth/completeProfile_screen.dart';
 import 'package:lms/screens/auth/reserPassDone_screen.dart';
 import 'package:lms/screens/auth/resetPass_screen.dart';
 import 'package:lms/screens/auth/login_screen.dart';
@@ -18,11 +19,13 @@ import 'package:lms/screens/auth/signup_screen.dart';
 import 'package:lms/screens/onBoarding/onboarding.dart';
 import 'package:lms/screens/onBoarding/splash_screen.dart';
 import 'package:lms/services/storage_service.dart';
+import 'package:lms/services/supabase_service.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await GetStorage.init();
   await Supabase.initialize(
       anonKey:
@@ -45,9 +48,11 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       getPages: Routes.pages,
-      initialRoute: StorageService.userSession != null
-          ? RoutesNamed.bottomNavBar
-          : RoutesNamed.onboard,
+      home: CompleteProfileScreen(),
+      // initialRoute:
+      //  StorageService.userSession != null
+      //     ? RoutesNamed.bottomNavBar
+      //     : RoutesNamed.onboard,
     );
   }
 }
