@@ -7,6 +7,7 @@ class SupabaseService extends GetxController {
 
   // Reactive user state
   Rx<User?> currentUser = Rx<User?>(null);
+
   RxMap<String, dynamic> userData = RxMap<String, dynamic>();
 
   @override

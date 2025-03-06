@@ -4,12 +4,13 @@ import 'package:lms/color/colors.dart';
 class ButtonWidget extends StatelessWidget {
   final String text;
   final double width;
-  const ButtonWidget(
-      {super.key, required this.text, this.width = double.infinity});
+
+  ButtonWidget({super.key, required this.text, this.width = double.infinity});
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: width,
       padding: EdgeInsets.symmetric(vertical: 14),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),

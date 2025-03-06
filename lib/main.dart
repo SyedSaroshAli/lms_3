@@ -8,6 +8,7 @@ import 'package:lms/screens/app/getEnroll_screen1.dart';
 import 'package:lms/screens/app/getEnroll_screen3.dart';
 import 'package:lms/screens/app/home_screen.dart';
 import 'package:lms/screens/app/inbox_screen.dart';
+import 'package:lms/screens/app/myCourses_screen.dart';
 import 'package:lms/screens/app/navigation_screen.dart';
 import 'package:lms/screens/app/profile_screen.dart';
 import 'package:lms/screens/app/settings_screen.dart';
@@ -18,8 +19,12 @@ import 'package:lms/screens/auth/login_screen.dart';
 import 'package:lms/screens/auth/signup_screen.dart';
 import 'package:lms/screens/onBoarding/onboarding.dart';
 import 'package:lms/screens/onBoarding/splash_screen.dart';
+import 'package:lms/screens/teacher/addCourse_screen.dart';
+import 'package:lms/screens/teacher/addCourse_screen1.dart';
+import 'package:lms/screens/teacher/myCourses_screen.dart';
 import 'package:lms/services/storage_service.dart';
 import 'package:lms/services/supabase_service.dart';
+import 'package:lms/widgets/teacherCourse_tile.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -48,7 +53,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       getPages: Routes.pages,
-      home: CompleteProfileScreen(),
+      home: AddCourseScreen(),
       // initialRoute:
       //  StorageService.userSession != null
       //     ? RoutesNamed.bottomNavBar
