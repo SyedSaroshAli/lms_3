@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       getPages: Routes.pages,
-      home: AddCourseScreen(),
+      home: HomeScreen(),
       // initialRoute:
       //  StorageService.userSession != null
       //     ? RoutesNamed.bottomNavBar

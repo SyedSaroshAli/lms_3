@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:lms/color/colors.dart';
 import 'package:lms/controllers/course_controller.dart';
 import 'package:lms/models/course_model.dart';
+import 'package:lms/routes/routes_named.dart';
 import 'package:lms/widgets/teacherCourse_tile.dart';
 
 class TeacherCoursesScreen extends StatelessWidget {
@@ -23,30 +24,32 @@ class TeacherCoursesScreen extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
         ),
-        body: GridView.builder(
+        body: Obx(() {
+          if (controller.fetchedCourses.isEmpty) {
+            return Center(
+                child: CircularProgressIndicator()); // Show loading spinner
+          }
+          return GridView.builder(
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 20,
-                childAspectRatio: 0.65),
-            itemCount: 3,
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 20,
+              childAspectRatio: 0.65,
+            ),
+            itemCount: controller.fetchedCourses.length,
             itemBuilder: (context, index) {
-              return TeacherCourseTile();
-            }),
+              final course = controller.fetchedCourses[index];
+              return TeacherCourseTile(
+                title: course['title'] ?? 'No Title',
+                length: course['length'] ?? 'Unknown',
+              );
+            },
+          );
+        }),
         floatingActionButton: GestureDetector(
           onTap: () {
-            controller.createCourse(Course(
-                title: "",
-                teacher_id: "63bdda63-2700-4e46-99ee-9d5b4de377c8",
-                description: "description",
-                price: 3.2,
-                category: "category",
-                certificate: true,
-                duration: 'duration',
-                url: 'courseImageUrl',
-                length: 'length',
-                discount: 3.2));
+            Get.toNamed(RoutesNamed.addCourseScreen);
           },
           child: Container(
             margin: EdgeInsets.only(

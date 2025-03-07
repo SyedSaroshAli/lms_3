@@ -3,10 +3,14 @@ import 'package:get/get.dart';
 import 'package:lms/color/colors.dart';
 import 'package:lms/controllers/course_controller.dart';
 import 'package:lms/models/course_model.dart';
+import 'package:lms/routes/routes.dart';
+import 'package:lms/routes/routes_named.dart';
+import 'package:lms/widgets/teacherCourse_tile.dart';
 
 class MyCoursesScreen extends StatelessWidget {
   MyCoursesScreen({super.key});
   final CourseController controller = Get.put(CourseController());
+  List fetchedCourses = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,23 +29,23 @@ class MyCoursesScreen extends StatelessWidget {
           padding: EdgeInsets.only(bottom: 20),
           itemCount: 30,
           itemBuilder: (context, index) {
-            return ListTile(
-              title: Text("name"),
-            );
+            return Container();
           }),
       floatingActionButton: GestureDetector(
         onTap: () {
-          controller.createCourse(Course(
-              title: "",
-              teacher_id: "63bdda63-2700-4e46-99ee-9d5b4de377c8",
-              description: "description",
-              price: 3.2,
-              category: "category",
-              certificate: true,
-              duration: 'duration',
-              url: 'courseImageUrl',
-              length: 'length',
-              discount: 3.2));
+          // controller.createCourse(Course(
+          //     title: "",
+          //     teacher_id: "63bdda63-2700-4e46-99ee-9d5b4de377c8",
+          //     description: "description",
+          //     price: 3.2,
+          //     category: "category",
+          //     certificate: true,
+          //     duration: 'duration',
+          //     url: 'courseImageUrl',
+          //     length: 'length',
+          //     discount: 3.2));
+          // Get.toNamed(RoutesNamed.addCourseScreen);
+          controller.fetchCourses();
         },
         child: Container(
           margin: EdgeInsets.only(

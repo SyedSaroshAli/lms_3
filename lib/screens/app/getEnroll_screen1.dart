@@ -6,6 +6,14 @@ import 'package:lms/screens/app/getEnroll_screen2.dart';
 import 'package:lms/widgets/buttonWidget.dart';
 
 class OverviewScreen extends StatefulWidget {
+  final String title, description;
+  final double price;
+  const OverviewScreen({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.price,
+  });
   @override
   _OverviewScreenState createState() => _OverviewScreenState();
 }

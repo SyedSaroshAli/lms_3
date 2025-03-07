@@ -5,6 +5,7 @@ import 'package:lms/screens/app/navigation_screen.dart';
 import 'package:lms/screens/auth/login_screen.dart';
 import 'package:lms/screens/auth/signup_screen.dart';
 import 'package:lms/screens/onBoarding/onboarding.dart';
+import 'package:lms/screens/teacher/addCourse_screen.dart';
 
 class Routes {
   static final pages = [
@@ -15,6 +16,10 @@ class Routes {
     GetPage(
       name: RoutesNamed.bottomNavBar,
       page: () => BottomNavBar(),
+    ),
+    GetPage(
+      name: RoutesNamed.addCourseScreen,
+      page: () => AddCourseScreen(),
     ),
   ];
 }

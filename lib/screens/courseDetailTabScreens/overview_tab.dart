@@ -82,7 +82,18 @@ import 'package:flutter/material.dart';
 import 'package:lms/color/colors.dart';
 
 class OverviewTab extends StatefulWidget {
-  const OverviewTab({super.key});
+  final String title, description, length, duration;
+  final double price, discount;
+  final bool certificate;
+  const OverviewTab(
+      {super.key,
+      required this.title,
+      required this.description,
+      required this.price,
+      required this.length,
+      required this.duration,
+      this.certificate = false,
+      this.discount = 0});
 
   @override
   _OverviewTabState createState() => _OverviewTabState();
@@ -106,7 +117,7 @@ class _OverviewTabState extends State<OverviewTab> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Graphic Design",
+                    widget.title,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                   ),
                   SizedBox(height: 3),
@@ -132,7 +143,7 @@ class _OverviewTabState extends State<OverviewTab> {
               Column(
                 children: [
                   Text(
-                    "72\$",
+                    "${widget.price.toString()}\$",
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
                   ),
                   Text(
@@ -150,8 +161,7 @@ class _OverviewTabState extends State<OverviewTab> {
           LayoutBuilder(
             builder: (context, constraints) {
               final textSpan = TextSpan(
-                text:
-                    "casca ca c aca c acaac ac ac aca ca cacaa ca ca ca cacaca ca cac acacacce  cew feffewf wfw fwef wfw fwe fwef wef we wfeffewfwfefweffwffefffwwwfwfwfwfwffwfwfwefwefwefwfwfwcsce cac qc cecasc eccea cdcewc s ce s",
+                text: widget.description,
                 style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
@@ -215,41 +225,74 @@ class _OverviewTabState extends State<OverviewTab> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.library_books),
+                        Image.asset(
+                          'assets/Book.png',
+                          height: 30,
+                        ),
                         SizedBox(width: 5),
-                        Text("80+ Lectures")
+                        Text(widget.length)
                       ],
                     ),
                     SizedBox(height: 20),
                     Row(
                       children: [
-                        Icon(Icons.library_books),
+                        Image.asset(
+                          'assets/Clock.png',
+                          height: 30,
+                        ),
                         SizedBox(width: 5),
-                        Text("80+ Lectures")
+                        Text(widget.duration)
                       ],
                     )
                   ],
                 ),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Icon(Icons.library_books),
-                        SizedBox(width: 5),
-                        Text("80+ Lectures")
-                      ],
-                    ),
+                    widget.certificate
+                        ? Row(
+                            children: [
+                              Image.asset(
+                                'assets/Certificate.png',
+                                height: 30,
+                              ),
+                              SizedBox(width: 5),
+                              Text("Certified")
+                            ],
+                          )
+                        : Row(
+                            children: [
+                              Image.asset(
+                                'assets/Certificate.png',
+                                height: 30,
+                              ),
+                              SizedBox(width: 5),
+                              Text("Not Certified")
+                            ],
+                          ),
                     SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Icon(Icons.library_books),
-                        SizedBox(width: 5),
-                        Text("80+ Lectures")
-                      ],
-                    )
+                    widget.discount == 0
+                        ? Row(
+                            children: [
+                              Icon(Icons.library_books),
+                              SizedBox(width: 5),
+                              Text("Discount")
+                            ],
+                          )
+                        : Row(
+                            children: [
+                              Image.asset(
+                                'assets/discount.png',
+                                height: 30,
+                              ),
+                              SizedBox(width: 5),
+                              Text("No Discount")
+                            ],
+                          )
                   ],
                 ),
               ],

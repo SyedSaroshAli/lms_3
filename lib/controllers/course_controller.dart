@@ -12,9 +12,19 @@ class CourseController extends GetxController {
   final userId = SupabaseService.client.auth.currentUser!.id;
   RxBool isCertified = false.obs;
 
+  // RxList fetchedCourses = [].obs;
   RxList fetchedCourses = [].obs;
+
   Rx<File?> thumbnail = Rx<File?>(null);
   RxString thumbnailPath = ''.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchCourses();
+    print("On init called");
+    // listenToAuthChanges();
+  }
 
   //create a course
   Future<void> createCourse(Course course) async {
@@ -51,11 +61,21 @@ class CourseController extends GetxController {
   Future<void> fetchCourses() async {
     try {
       final response = await SupabaseService.client
-          .from('course')
+          .from('courses')
           .select('*'); // Fetch all columns
 
       print('Courses fetched successfully: $response');
-      fetchedCourses.value = response;
+
+      for (var item in response) {
+        fetchedCourses.add(item);
+      }
+
+      print(fetchedCourses);
+      // fetchedCourses.assignAll(
+      //     response.map((course) => Course.fromJson(course)).toList());
+      // Ensure we explicitly convert it into a List<Course>
+
+      //print('Parsed Courses: $coursesList');
     } catch (e) {
       print('Error fetching courses: $e');
     }

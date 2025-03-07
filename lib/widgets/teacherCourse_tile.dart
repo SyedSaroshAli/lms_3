@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:lms/color/colors.dart';
 
 class TeacherCourseTile extends StatelessWidget {
-  const TeacherCourseTile({super.key});
+  final String title;
+  final String length;
+  const TeacherCourseTile(
+      {super.key, required this.title, required this.length});
 
   @override
   Widget build(BuildContext context) {
@@ -11,48 +13,51 @@ class TeacherCourseTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       elevation: 3,
       child: Container(
+        width: 180,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min, // Ensure it wraps content properly
           children: [
-            SizedBox(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                    width: 180,
-                    height: 160,
-                    'assets/videoThumbnail.png',
-                    fit: BoxFit.fill),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                'assets/videoThumbnail.png',
+                width: 180,
+                height: 160,
+                fit: BoxFit.fill,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 7, top: 3, right: 10),
+              padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min, // Wrap content height
                 children: [
-                  SizedBox(
-                    width: 150,
-                    child: Text(
-                      "Digital photography master class",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 15,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(
-                    height: 3,
-                  ),
+                  const SizedBox(
+                      height: 10), // Adds spacing before the bottom row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         width: 50,
-                        padding: EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: const Color.fromARGB(97, 239, 229, 140)),
+                          borderRadius: BorderRadius.circular(20),
+                          color: const Color.fromARGB(97, 239, 229, 140),
+                        ),
                         child: Row(
                           children: [
                             Icon(
@@ -60,16 +65,15 @@ class TeacherCourseTile extends StatelessWidget {
                               color: Colors.yellow.shade700,
                               size: 16,
                             ),
-                            SizedBox(
-                              width: 2,
-                            ),
+                            const SizedBox(width: 2),
                             Text(
                               '4.7',
                               style: TextStyle(
-                                  color: Colors.yellow.shade700,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12),
-                            )
+                                color: Colors.yellow.shade700,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -80,21 +84,21 @@ class TeacherCourseTile extends StatelessWidget {
                             color: AppColors.buttonColor,
                             size: 16,
                           ),
-                          SizedBox(
-                            width: 2,
-                          ),
+                          const SizedBox(width: 2),
                           Text(
-                            '1 week',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 12),
-                          )
+                            length,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
                         ],
-                      )
+                      ),
                     ],
-                  )
+                  ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

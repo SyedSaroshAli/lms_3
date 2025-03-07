@@ -73,7 +73,20 @@ import 'package:lms/screens/courseDetailTabScreens/overview_tab.dart';
 import 'package:lms/screens/courseDetailTabScreens/reviews_tab.dart';
 
 class CourseDetailScreen extends StatelessWidget {
-  const CourseDetailScreen({super.key});
+  final String title, description, length, duration, imageurl;
+  final double price, discount;
+  final bool certificate;
+
+  const CourseDetailScreen(
+      {super.key,
+      required this.title,
+      required this.description,
+      required this.price,
+      required this.length,
+      required this.duration,
+      required this.discount,
+      required this.certificate,
+      required this.imageurl});
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +105,8 @@ class CourseDetailScreen extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     height: 210,
-                    child: Image.asset(
-                      'assets/videoThumbnail.png',
+                    child: Image.network(
+                      imageurl,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -139,7 +152,19 @@ class CourseDetailScreen extends StatelessWidget {
 
               Expanded(
                 child: TabBarView(
-                  children: [OverviewTab(), LessonsTab(), ReviewsTab()],
+                  children: [
+                    OverviewTab(
+                      title: title,
+                      price: price,
+                      description: description,
+                      length: length,
+                      certificate: certificate,
+                      duration: duration,
+                      discount: discount,
+                    ),
+                    LessonsTab(),
+                    ReviewsTab()
+                  ],
                 ),
               ),
             ],
