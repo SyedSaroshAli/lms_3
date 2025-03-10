@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lms/models/course_model.dart';
 import 'package:lms/services/supabase_service.dart';
 import 'package:lms/utils/helper.dart';
@@ -8,12 +9,21 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CourseController extends GetxController {
   RxString selectedCurrency = "Dollar".obs;
+  List<String> categories = ["UI/UX", "Graphic Design", "Figma"];
+  late List subCategories = categories.sublist(1);
+  RxString searchQuery = ''.obs;
   RxDouble discount = 10.0.obs;
   final userId = SupabaseService.client.auth.currentUser!.id;
   RxBool isCertified = false.obs;
+  RxString selectedCourse = "All".obs;
 
-  // RxList fetchedCourses = [].obs;
+  RxBool oldestToNew = false.obs;
+  RxBool newestToOldest = false.obs;
+  RxBool lowestToHighet = false.obs;
+  RxBool highestToLowest = false.obs;
+
   RxList fetchedCourses = [].obs;
+  RxList filteredCourses = [].obs;
 
   Rx<File?> thumbnail = Rx<File?>(null);
   RxString thumbnailPath = ''.obs;
@@ -22,8 +32,8 @@ class CourseController extends GetxController {
   void onInit() {
     super.onInit();
     fetchCourses();
+
     print("On init called");
-    // listenToAuthChanges();
   }
 
   //create a course
@@ -57,27 +67,71 @@ class CourseController extends GetxController {
     }
   }
 
+  //querry based searching
+  // Query-based searching
+  void searchCourses(String query) {
+    searchQuery.value = query;
+
+    if (query.isEmpty) {
+      filteredCourses.assignAll(fetchedCourses);
+    } else {
+      filteredCourses.assignAll(fetchedCourses.where((course) {
+        String title = (course['title'] ?? '').toString().toLowerCase();
+        return title.contains(query.toLowerCase());
+      }).toList());
+    }
+    print('Filtered courses count: ${filteredCourses.length}');
+    print('Filtered courses: $filteredCourses');
+  }
+
   //fetch course details
+  // Fetch courses from Supabase
   Future<void> fetchCourses() async {
+    var response = [];
     try {
-      final response = await SupabaseService.client
-          .from('courses')
-          .select('*'); // Fetch all columns
+      if (selectedCourse.value == "All") {
+        response = await SupabaseService.client.from('courses').select('*');
+      }
 
       print('Courses fetched successfully: $response');
 
-      for (var item in response) {
-        fetchedCourses.add(item);
-      }
-
-      print(fetchedCourses);
-      // fetchedCourses.assignAll(
-      //     response.map((course) => Course.fromJson(course)).toList());
-      // Ensure we explicitly convert it into a List<Course>
-
-      //print('Parsed Courses: $coursesList');
+      fetchedCourses.assignAll(response);
+      filteredCourses.assignAll(response); // Initialize both lists correctly
     } catch (e) {
       print('Error fetching courses: $e');
     }
+  }
+
+  void applySorting() {
+    filteredCourses.sort((a, b) {
+      DateTime dateA = DateTime.parse(a['created_at']);
+      DateTime dateB = DateTime.parse(b['created_at']);
+      double priceA = (a['price'] ?? 0).toDouble();
+      double priceB = (b['price'] ?? 0).toDouble();
+
+      // Sorting based on selected conditions
+      int dateComparison = 0;
+      int priceComparison = 0;
+
+      if (oldestToNew.value) {
+        dateComparison = dateA.compareTo(dateB); // Oldest to Newest
+      } else if (newestToOldest.value) {
+        dateComparison = dateB.compareTo(dateA); // Newest to Oldest
+      }
+
+      if (lowestToHighet.value) {
+        priceComparison = priceA.compareTo(priceB); // Lowest to Highest
+      } else if (highestToLowest.value) {
+        priceComparison = priceB.compareTo(priceA); // Highest to Lowest
+      }
+
+      // If both sorting conditions are applied, prioritize date first, then price
+      if (dateComparison != 0) {
+        return dateComparison;
+      }
+      return priceComparison;
+    });
+
+    filteredCourses.refresh(); // Refresh UI
   }
 }

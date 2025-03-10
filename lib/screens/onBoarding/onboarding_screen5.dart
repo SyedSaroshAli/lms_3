@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lms/color/colors.dart';
+import 'package:lms/routes/routes_named.dart';
 
 class OnboardingScreen5 extends StatelessWidget {
   const OnboardingScreen5({super.key});
@@ -60,7 +62,9 @@ class OnboardingScreen5 extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(RoutesNamed.signIn);
+                    },
                     child: Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: width / 7, vertical: height / 50),
@@ -76,7 +80,9 @@ class OnboardingScreen5 extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(RoutesNamed.signUp);
+                    },
                     child: Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: width / 7, vertical: height / 52),

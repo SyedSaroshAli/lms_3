@@ -53,11 +53,10 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       getPages: Routes.pages,
-      home: HomeScreen(),
-      // initialRoute:
-      //  StorageService.userSession != null
-      //     ? RoutesNamed.bottomNavBar
-      //     : RoutesNamed.onboard,
+      // home: HomeScreen(),
+      initialRoute: StorageService.userSession != null
+          ? RoutesNamed.bottomNavBar
+          : RoutesNamed.onboard,
     );
   }
 }
