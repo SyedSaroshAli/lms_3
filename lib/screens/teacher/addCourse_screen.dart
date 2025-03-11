@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:lms/color/colors.dart';
 import 'package:lms/controllers/course_controller.dart';
 import 'package:lms/models/course_model.dart';
+import 'package:lms/routes/routes_named.dart';
 import 'package:lms/screens/app/navigation_screen.dart';
 import 'package:lms/screens/onBoarding/onboarding_screen1.dart';
 import 'package:lms/screens/onBoarding/onboarding_screen2.dart';
@@ -153,11 +154,12 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
 
                           // ✅ Show success message & navigate
                           showSnackBar('Success', "Course added successfully!");
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BottomNavBar()),
-                          );
+                          Get.toNamed(RoutesNamed.addChapterScreen);
+                          // Navigator.pushReplacement(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) => BottomNavBar()),
+                          // );
                         } catch (e) {
                           showSnackBar('Error', "An error occurred: $e");
                           print("Error: $e");

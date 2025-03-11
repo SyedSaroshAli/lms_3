@@ -5,4 +5,5 @@ class RoutesNamed {
   static final onboard = '/onboard';
   static final bottomNavBar = '/bottomNav';
   static final addCourseScreen = '/addCourse';
+  static final addChapterScreen = '/addChapter';
 }

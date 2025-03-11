@@ -12,7 +12,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> categories = ["UI/UX", "Graphic Design", "Figma"];
     final CourseController controller = Get.put(CourseController());
 
     return Scaffold(
@@ -118,7 +117,7 @@ class HomeScreen extends StatelessWidget {
             SliverPersistentHeader(
               pinned: true,
               floating: false,
-              delegate: _StickyCategories(categories),
+              delegate: _StickyCategories(controller.categories),
             ),
           ];
         },

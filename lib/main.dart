@@ -21,6 +21,7 @@ import 'package:lms/screens/onBoarding/onboarding.dart';
 import 'package:lms/screens/onBoarding/splash_screen.dart';
 import 'package:lms/screens/teacher/addCourse_screen.dart';
 import 'package:lms/screens/teacher/addCourse_screen1.dart';
+import 'package:lms/screens/teacher/addCourse_screen3.dart';
 import 'package:lms/screens/teacher/myCourses_screen.dart';
 import 'package:lms/services/storage_service.dart';
 import 'package:lms/services/supabase_service.dart';
@@ -53,10 +54,10 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       getPages: Routes.pages,
-      // home: HomeScreen(),
-      initialRoute: StorageService.userSession != null
-          ? RoutesNamed.bottomNavBar
-          : RoutesNamed.onboard,
+      home: AddChapterScreen(),
+      // initialRoute: StorageService.userSession != null
+      //     ? RoutesNamed.bottomNavBar
+      //     : RoutesNamed.onboard,
     );
   }
 }

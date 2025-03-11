@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:lms/models/ChapterTopic_model.dart';
 import 'package:lms/models/course_model.dart';
 import 'package:lms/services/supabase_service.dart';
 import 'package:lms/utils/helper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 class CourseController extends GetxController {
   RxString selectedCurrency = "Dollar".obs;
@@ -13,15 +15,18 @@ class CourseController extends GetxController {
   late List subCategories = categories.sublist(1);
   RxString searchQuery = ''.obs;
   RxDouble discount = 10.0.obs;
+  RxString videoUrl = ''.obs;
   final userId = SupabaseService.client.auth.currentUser!.id;
   RxBool isCertified = false.obs;
   RxString selectedCourse = "All".obs;
-
+  RxList<Rx<Chapter>> chapters = <Rx<Chapter>>[Chapter(name: '').obs].obs;
+  RxString insertedCourseId = ''.obs; // Observable to store course ID
   RxBool oldestToNew = false.obs;
   RxBool newestToOldest = false.obs;
   RxBool lowestToHighet = false.obs;
+  var videoFile = Rxn<File>();
   RxBool highestToLowest = false.obs;
-
+  RxInt currentStep = 0.obs;
   RxList fetchedCourses = [].obs;
   RxList filteredCourses = [].obs;
 
@@ -39,9 +44,14 @@ class CourseController extends GetxController {
   //create a course
   Future<void> createCourse(Course course) async {
     try {
-      final response =
-          await SupabaseService.client.from('courses').insert(course.toJson());
-
+      final response = await SupabaseService.client
+          .from('courses')
+          .insert(course.toJson())
+          .select();
+      if (response.isNotEmpty) {
+        insertedCourseId.value = response[0]['id']; // Store course ID
+        print('Inserted Course ID: ${insertedCourseId.value}');
+      }
       print('course inserted succesfully: $response');
     } catch (e) {
       showSnackBar('Error', 'An error occured : $e');
@@ -66,6 +76,71 @@ class CourseController extends GetxController {
       thumbnailPath.value = path;
     }
   }
+
+  // Example usage in a button click
+  void pickVideo() async {
+    File? video = await pickVideoFromGallery();
+    if (video != null) {
+      videoFile.value = video;
+      showSnackBar("Video Selected", "Ready to upload.");
+    } else {
+      showSnackBar("No Video Selected", "Please pick a video file.");
+    }
+  }
+
+  Future<void> uploadVideo(int chapterIndex, int topicIndex) async {
+    if (videoFile.value == null) {
+      showSnackBar("No Video Selected", "Please pick a video file.");
+      return;
+    }
+
+    String? url = await uploadVideoToSupabase(videoFile.value!);
+
+    if (url != null) {
+      chapters[chapterIndex].update((chapter) {
+        if (chapter != null) {
+          // Create a new Topic object with the updated video URL
+          var updatedTopic = chapter.topics[topicIndex].copyWith(videoUrl: url);
+
+          // Replace the topic in the list
+          chapter.topics[topicIndex] = updatedTopic;
+        }
+      });
+
+      showSnackBar("Upload Successful", "Video URL: $url");
+    } else {
+      showSnackBar("Upload Failed", "Please try again.");
+    }
+  }
+
+//   Future<void> uploadVideo(int chapterIndex, int topicIndex) async {
+//   if (videoFile.value == null) {
+//     showSnackBar("No Video Selected", "Please pick a video file.");
+//     return;
+//   }
+
+//   String? url = await uploadVideoToSupabase(videoFile.value!); // Upload the video
+
+//   if (url != null) {
+//     chapters[chapterIndex].update((chapter) {
+//       if (chapter != null) {
+//         // Create a modifiable copy of the list and update it
+//         var updatedTopics = List<Topic>.from(chapter.topics);
+//         var updatedVideoUrls = List<String>.from(updatedTopics[topicIndex].videoUrls);
+
+//         updatedVideoUrls.add(url); // Add the new video URL
+
+//         updatedTopics[topicIndex] = updatedTopics[topicIndex].copyWith(videoUrls: updatedVideoUrls);
+
+//         chapter.topics = updatedTopics; // Update the chapter's topics list
+//       }
+//     });
+
+//     showSnackBar("Upload Successful", "Video URL: $url");
+//   } else {
+//     showSnackBar("Upload Failed", "Please try again.");
+//   }
+// }
 
   //querry based searching
   // Query-based searching
@@ -133,5 +208,59 @@ class CourseController extends GetxController {
     });
 
     filteredCourses.refresh(); // Refresh UI
+  }
+
+  //Adding chapters and their topics
+  void addChapter() {
+    var newChapter = Chapter(name: "", topics: []).obs; // Now an Rx<Chapter>
+    chapters.add(newChapter);
+  }
+
+  void addTopic(int chapterIndex) {
+    if (chapterIndex < chapters.length) {
+      chapters[chapterIndex].update((chapter) {
+        chapter?.topics.add(Topic(title: "", videoUrl: ''));
+      });
+    }
+  }
+
+  void removeTopic(int chapterIndex, int topicIndex) {
+    if (chapterIndex < chapters.length) {
+      chapters[chapterIndex].update((chapter) {
+        if (chapter != null && topicIndex < chapter.topics.length) {
+          chapter.topics.removeAt(topicIndex);
+        }
+      });
+    }
+  }
+
+  void removeChapter(int index) {
+    if (index < chapters.length) {
+      chapters.removeAt(index);
+    }
+  }
+
+  Future<void> saveChaptersToSupabase(String courseId, String teacherId) async {
+    final supabase = Supabase.instance.client;
+
+    for (var chapterRx in chapters) {
+      var chapter = chapterRx.value; // Get actual Chapter object
+
+      // Convert topics to a format suitable for Supabase
+      var topicsJson = chapter.topics.map((t) => t.toJson()).toList();
+
+      final response = await supabase.from("chapters").insert({
+        "course_id": courseId,
+        "teacher_id": teacherId,
+        "chapter_name": chapter.name,
+        "topics": topicsJson, // Now matches the correct structure
+      });
+
+      if (response.error != null) {
+        print("Error saving chapter: ${response.error!.message}");
+      } else {
+        print("Chapter '${chapter.name}' inserted successfully!");
+      }
+    }
   }
 }

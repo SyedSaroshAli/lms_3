@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
+import 'package:lms/utils/helper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 class SupabaseService extends GetxController {
   static final SupabaseClient client = Supabase.instance.client;
@@ -62,4 +66,6 @@ class SupabaseService extends GetxController {
       print(' Error fetching user data: $error');
     }
   }
+
+  // Function to upload video to Supabase Storage
 }

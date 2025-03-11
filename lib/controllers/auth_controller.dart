@@ -24,7 +24,7 @@ class AuthController extends GetxController {
         StorageService.session
             .write(StorageKeys.userSession, response.session!.toJson());
         print(response.session);
-        Get.offAllNamed(RoutesNamed.home);
+        Get.offAllNamed(RoutesNamed.bottomNavBar);
       }
       isLoading.value = false;
     } on AuthException catch (e) {
@@ -44,7 +44,7 @@ class AuthController extends GetxController {
         StorageService.session
             .write(StorageKeys.userSession, data.session!.toJson());
         print(data.session);
-        Get.offAllNamed(RoutesNamed.home);
+        Get.offAllNamed(RoutesNamed.bottomNavBar);
       }
       isLoading.value = false;
     } on AuthException catch (e) {
