@@ -1,26 +1,37 @@
+import 'package:flutter/material.dart';
+
 class Chapter {
   String name;
   List<Topic> topics;
+  TextEditingController controller;
 
   Chapter({required this.name, List<Topic>? topics})
-      : topics = topics ?? [Topic(title: '')];
+      : topics = topics ?? [], // Make it mutable
+        controller = TextEditingController(text: name);
+
+  // Convert Chapter to JSON format
+  Map<String, dynamic> toJson() {
+    return {
+      "chapter_name": name,
+      "topics":
+          topics.map((t) => t.toJson()).toList(), // Convert topics to JSON
+    };
+  }
 }
 
 class Topic {
   String title;
-  List<String> videoUrls; // Change from single URL to a list
+  String videoUrl;
+  TextEditingController controller;
 
-  Topic({required this.title, this.videoUrls = const []});
+  Topic({required this.title, required this.videoUrl})
+      : controller = TextEditingController(text: title);
 
-  Map<String, dynamic> toJson() => {
-        "title": title,
-        "video_urls": videoUrls, // Store as an array in DB
-      };
-
-  factory Topic.fromJson(Map<String, dynamic> json) {
-    return Topic(
-      title: json["title"],
-      videoUrls: List<String>.from(json["video_urls"] ?? []),
-    );
+  // Convert Topic to JSON format (exclude the controller)
+  Map<String, dynamic> toJson() {
+    return {
+      "title": title,
+      "video_url": videoUrl, // Ensure this matches your Supabase column names
+    };
   }
 }

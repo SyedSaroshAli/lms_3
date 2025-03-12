@@ -19,7 +19,8 @@ class CourseController extends GetxController {
   final userId = SupabaseService.client.auth.currentUser!.id;
   RxBool isCertified = false.obs;
   RxString selectedCourse = "All".obs;
-  RxList<Rx<Chapter>> chapters = <Rx<Chapter>>[Chapter(name: '').obs].obs;
+  RxList<Chapter> chapters = <Chapter>[].obs;
+
   RxString insertedCourseId = ''.obs; // Observable to store course ID
   RxBool oldestToNew = false.obs;
   RxBool newestToOldest = false.obs;
@@ -97,17 +98,14 @@ class CourseController extends GetxController {
     String? url = await uploadVideoToSupabase(videoFile.value!);
 
     if (url != null) {
-      chapters[chapterIndex].update((chapter) {
-        if (chapter != null) {
-          // Create a new Topic object with the updated video URL
-          var updatedTopic = chapter.topics[topicIndex].copyWith(videoUrl: url);
+      // Directly update the topic's video URL
+      chapters[chapterIndex].topics[topicIndex].videoUrl = url;
 
-          // Replace the topic in the list
-          chapter.topics[topicIndex] = updatedTopic;
-        }
-      });
+      // Refresh the list to reflect the change
+      chapters.refresh();
 
       showSnackBar("Upload Successful", "Video URL: $url");
+      videoFile.value = null;
     } else {
       showSnackBar("Upload Failed", "Please try again.");
     }
@@ -212,25 +210,22 @@ class CourseController extends GetxController {
 
   //Adding chapters and their topics
   void addChapter() {
-    var newChapter = Chapter(name: "", topics: []).obs; // Now an Rx<Chapter>
+    var newChapter = Chapter(name: "", topics: []);
     chapters.add(newChapter);
   }
 
   void addTopic(int chapterIndex) {
     if (chapterIndex < chapters.length) {
-      chapters[chapterIndex].update((chapter) {
-        chapter?.topics.add(Topic(title: "", videoUrl: ''));
-      });
+      chapters[chapterIndex].topics.add(Topic(title: "", videoUrl: ""));
+      chapters.refresh(); // Notify GetX about the update
     }
   }
 
   void removeTopic(int chapterIndex, int topicIndex) {
-    if (chapterIndex < chapters.length) {
-      chapters[chapterIndex].update((chapter) {
-        if (chapter != null && topicIndex < chapter.topics.length) {
-          chapter.topics.removeAt(topicIndex);
-        }
-      });
+    if (chapterIndex < chapters.length &&
+        topicIndex < chapters[chapterIndex].topics.length) {
+      chapters[chapterIndex].topics.removeAt(topicIndex);
+      chapters.refresh();
     }
   }
 
@@ -243,9 +238,8 @@ class CourseController extends GetxController {
   Future<void> saveChaptersToSupabase(String courseId, String teacherId) async {
     final supabase = Supabase.instance.client;
 
-    for (var chapterRx in chapters) {
-      var chapter = chapterRx.value; // Get actual Chapter object
-
+    for (var chapter in chapters) {
+      // No need for .value anymore
       // Convert topics to a format suitable for Supabase
       var topicsJson = chapter.topics.map((t) => t.toJson()).toList();
 

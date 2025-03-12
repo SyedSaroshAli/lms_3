@@ -68,8 +68,8 @@ class AddChapterScreen extends StatelessWidget {
                               ),
                               onChanged: (val) =>
                                   controller.chapters[i].value.name = val,
-                              controller: TextEditingController(
-                                  text: controller.chapters[i].value.name),
+                              controller:
+                                  controller.chapters[i].value.controller,
                             ),
                             SizedBox(height: 10),
                             for (int j = 0;
