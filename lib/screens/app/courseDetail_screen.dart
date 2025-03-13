@@ -73,7 +73,13 @@ import 'package:lms/screens/courseDetailTabScreens/overview_tab.dart';
 import 'package:lms/screens/courseDetailTabScreens/reviews_tab.dart';
 
 class CourseDetailScreen extends StatelessWidget {
-  final String title, description, length, duration, imageurl;
+  final String title,
+      description,
+      length,
+      duration,
+      imageurl,
+      teacher_id,
+      course_id;
   final double price, discount;
   final bool certificate;
 
@@ -86,7 +92,9 @@ class CourseDetailScreen extends StatelessWidget {
       required this.duration,
       required this.discount,
       required this.certificate,
-      required this.imageurl});
+      required this.imageurl,
+      required this.teacher_id,
+      required this.course_id});
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +171,9 @@ class CourseDetailScreen extends StatelessWidget {
                       discount: discount,
                     ),
                     LessonsTab(),
-                    ReviewsTab()
+                    ReviewsTab(
+                      course_id: course_id,
+                    ),
                   ],
                 ),
               ),

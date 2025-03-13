@@ -10,6 +10,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 class CourseController extends GetxController {
+  final SupabaseService supabaseController = Get.put(SupabaseService());
   RxString selectedCurrency = "Dollar".obs;
   List<String> categories = ["UI/UX", "Graphic Design", "Figma"];
   late List subCategories = categories.sublist(1);
@@ -30,7 +31,7 @@ class CourseController extends GetxController {
   RxInt currentStep = 0.obs;
   RxList fetchedCourses = [].obs;
   RxList filteredCourses = [].obs;
-
+  RxList fetchedTeacherCourses = [].obs;
   Rx<File?> thumbnail = Rx<File?>(null);
   RxString thumbnailPath = ''.obs;
 
@@ -38,7 +39,7 @@ class CourseController extends GetxController {
   void onInit() {
     super.onInit();
     fetchCourses();
-
+    fetchTeacherCourses();
     print("On init called");
   }
 
@@ -157,8 +158,7 @@ class CourseController extends GetxController {
     print('Filtered courses: $filteredCourses');
   }
 
-  //fetch course details
-  // Fetch courses from Supabase
+  // Fetch all courses from Supabase
   Future<void> fetchCourses() async {
     var response = [];
     try {
@@ -167,9 +167,30 @@ class CourseController extends GetxController {
       }
 
       print('Courses fetched successfully: $response');
+      print('${supabaseController.userData}');
 
       fetchedCourses.assignAll(response);
       filteredCourses.assignAll(response); // Initialize both lists correctly
+    } catch (e) {
+      print('Error fetching courses: $e');
+    }
+  }
+
+  //FETCH TEACHER COURSES
+  Future<void> fetchTeacherCourses() async {
+    var response = [];
+    print(userId);
+    print('${supabaseController.userData['role']}');
+    try {
+      response = await SupabaseService.client
+          .from('courses')
+          .select('*')
+          .eq('teacher_id', userId);
+
+      print('Courses fetched successfully: $response');
+
+      fetchedTeacherCourses.assignAll(response);
+      //   filteredCourses.assignAll(response); // Initialize both lists correctly
     } catch (e) {
       print('Error fetching courses: $e');
     }
@@ -239,21 +260,19 @@ class CourseController extends GetxController {
     final supabase = Supabase.instance.client;
 
     for (var chapter in chapters) {
-      // No need for .value anymore
-      // Convert topics to a format suitable for Supabase
       var topicsJson = chapter.topics.map((t) => t.toJson()).toList();
 
-      final response = await supabase.from("chapters").insert({
-        "course_id": courseId,
-        "teacher_id": teacherId,
-        "chapter_name": chapter.name,
-        "topics": topicsJson, // Now matches the correct structure
-      });
+      try {
+        await supabase.from("chapters").insert({
+          "course_id": courseId,
+          "teacher_id": teacherId,
+          "chapter_name": chapter.name,
+          "topics": topicsJson,
+        });
 
-      if (response.error != null) {
-        print("Error saving chapter: ${response.error!.message}");
-      } else {
         print("Chapter '${chapter.name}' inserted successfully!");
+      } catch (e) {
+        print("Error saving chapter: $e");
       }
     }
   }

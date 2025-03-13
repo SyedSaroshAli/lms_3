@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:lms/color/colors.dart';
 import 'package:lms/controllers/course_controller.dart';
 import 'package:lms/models/ChapterTopic_model.dart';
+import 'package:lms/routes/routes_named.dart';
 import 'package:lms/services/supabase_service.dart';
 import 'package:lms/utils/helper.dart';
 
@@ -37,11 +38,11 @@ class AddChapterScreen extends StatelessWidget {
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
-                          if (controller.chapters[i].value.topics.isNotEmpty)
+                          if (controller.chapters[i].topics.isNotEmpty)
                             Container(
                               width: 3,
-                              height: 40.0 *
-                                  controller.chapters[i].value.topics.length,
+                              height:
+                                  40.0 * controller.chapters[i].topics.length,
                               color: AppColors.buttonColor,
                             ),
                         ],
@@ -67,13 +68,11 @@ class AddChapterScreen extends StatelessWidget {
                                 border: OutlineInputBorder(),
                               ),
                               onChanged: (val) =>
-                                  controller.chapters[i].value.name = val,
-                              controller:
-                                  controller.chapters[i].value.controller,
+                                  controller.chapters[i].name = val,
                             ),
                             SizedBox(height: 10),
                             for (int j = 0;
-                                j < controller.chapters[i].value.topics.length;
+                                j < controller.chapters[i].topics.length;
                                 j++)
                               Row(
                                 children: [
@@ -336,13 +335,7 @@ class AddChapterScreen extends StatelessWidget {
                                           border: OutlineInputBorder(),
                                         ),
                                         onChanged: (val) => controller
-                                            .chapters[i]
-                                            .value
-                                            .topics[j]
-                                            .title = val,
-                                        controller: TextEditingController(
-                                            text: controller.chapters[i].value
-                                                .topics[j].title),
+                                            .chapters[i].topics[j].title = val,
                                       ),
                                     ),
                                   ),
@@ -449,9 +442,11 @@ class AddChapterScreen extends StatelessWidget {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
           onPressed: () async {
+            print(userId);
             await controller.saveChaptersToSupabase(
                 controller.insertedCourseId.toString(), userId);
             Get.snackbar("Success", "Chapters saved to Supabase");
+            Get.toNamed(RoutesNamed.home);
           },
           child: Text("Save Chapters",
               style: TextStyle(color: Colors.white, fontSize: 16)),

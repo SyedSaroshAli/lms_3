@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:lms/color/colors.dart';
 
 class ReviewTile extends StatelessWidget {
-  const ReviewTile({super.key});
+  final String name, imageUrl, review;
+  //final double rating;
+  const ReviewTile({
+    super.key,
+    required this.name,
+    required this.imageUrl,
+    required this.review,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +22,7 @@ class ReviewTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -28,7 +36,7 @@ class ReviewTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Muhammad Arsalan",
+                    name,
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   Text(
@@ -57,8 +65,7 @@ class ReviewTile extends StatelessWidget {
           SizedBox(
             height: 15,
           ),
-          Text(
-              "Lorenfesfadvmsdpfoescsddscascscesvcscvsdlomvomvomomvomdomvomdomomdmvomdomom ofmsom ofmso mfos mvom domv omvdom vdom vdom vd")
+          Text(review)
         ],
       ),
     );

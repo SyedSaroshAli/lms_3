@@ -1,7 +1,7 @@
 class ReviewsModel {
   String student_id;
   String course_id;
-  double rating;
+  int rating; // Change from double to int
   String comment;
 
   ReviewsModel({
@@ -14,10 +14,13 @@ class ReviewsModel {
   // Convert JSON to Model
   factory ReviewsModel.fromJson(Map<String, dynamic> json) {
     return ReviewsModel(
-        student_id: json['student_id'] ?? '',
-        course_id: json['course_id'],
-        rating: json['rating'] ?? '',
-        comment: json['comment']);
+      student_id: json['student_id'] ?? '',
+      course_id: json['course_id'] ?? '',
+      rating: json['rating'] is int
+          ? json['rating']
+          : int.parse(json['rating'].toString()), // Handle integer safely
+      comment: json['comment'] ?? '',
+    );
   }
 
   // Convert Model to JSON

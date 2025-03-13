@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lms/color/colors.dart';
 import 'package:lms/controllers/course_controller.dart';
+import 'package:lms/controllers/reviews_controller.dart';
 import 'package:lms/models/course_model.dart';
 import 'package:lms/screens/app/courseDetail_screen.dart';
+import 'package:lms/services/supabase_service.dart';
 import 'package:lms/widgets/course_tile.dart';
 import 'package:lms/widgets/filterDialogue_widget.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -13,6 +16,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CourseController controller = Get.put(CourseController());
+    final SupabaseService supabaseService = Get.put(SupabaseService());
+    final ReviewsController reviewsController = Get.put(ReviewsController());
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -167,10 +172,13 @@ class HomeScreen extends StatelessWidget {
                         var course = controller.filteredCourses[index];
                         return GestureDetector(
                           onTap: () {
+                            reviewsController.fetchReviews(course["id"]);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => CourseDetailScreen(
+                                          teacher_id: course['teacher_id'],
+                                          course_id: course["id"],
                                           description: course['description'],
                                           title: course['title'],
                                           price: course['price'],

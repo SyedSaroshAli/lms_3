@@ -55,7 +55,7 @@ class SupabaseService extends GetxController {
       final response = await client
           .from('user')
           .select(
-            'full_name, image, skills, bio',
+            'full_name, image, skills, bio,role',
           )
           .eq('id', user.id)
           .single();

@@ -6,7 +6,7 @@ import 'package:lms/screens/auth/login_screen.dart';
 import 'package:lms/screens/auth/signup_screen.dart';
 import 'package:lms/screens/onBoarding/onboarding.dart';
 import 'package:lms/screens/teacher/addCourse_screen.dart';
-import 'package:lms/screens/teacher/addCourse_screen3.dart';
+import 'package:lms/screens/teacher/addChapter_screen.dart';
 
 class Routes {
   static final pages = [

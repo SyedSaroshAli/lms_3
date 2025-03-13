@@ -1,13 +1,9 @@
-import 'package:flutter/material.dart';
-
 class Chapter {
   String name;
   List<Topic> topics;
-  TextEditingController controller;
 
   Chapter({required this.name, List<Topic>? topics})
-      : topics = topics ?? [], // Make it mutable
-        controller = TextEditingController(text: name);
+      : topics = topics ?? []; // Ensure topics is mutable
 
   // Convert Chapter to JSON format
   Map<String, dynamic> toJson() {
@@ -22,12 +18,10 @@ class Chapter {
 class Topic {
   String title;
   String videoUrl;
-  TextEditingController controller;
 
-  Topic({required this.title, required this.videoUrl})
-      : controller = TextEditingController(text: title);
+  Topic({required this.title, required this.videoUrl});
 
-  // Convert Topic to JSON format (exclude the controller)
+  // Convert Topic to JSON format
   Map<String, dynamic> toJson() {
     return {
       "title": title,

@@ -2,13 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lms/color/colors.dart';
 import 'package:lms/controllers/course_controller.dart';
+import 'package:lms/controllers/enrollment_controller.dart';
+import 'package:lms/controllers/reviews_controller.dart';
 import 'package:lms/models/course_model.dart';
 import 'package:lms/routes/routes_named.dart';
+import 'package:lms/screens/teacher/teacherCourseDetail_screen.dart';
+import 'package:lms/services/supabase_service.dart';
 import 'package:lms/widgets/teacherCourse_tile.dart';
 
 class TeacherCoursesScreen extends StatelessWidget {
   TeacherCoursesScreen({super.key});
   final CourseController controller = Get.put(CourseController());
+  final SupabaseService supabaseController = Get.find<SupabaseService>();
+  final ReviewsController reviewsController = Get.find<ReviewsController>();
+  final EnrollmentsController enrollmentsController =
+      Get.find<EnrollmentsController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +33,7 @@ class TeacherCoursesScreen extends StatelessWidget {
           ),
         ),
         body: Obx(() {
-          if (controller.fetchedCourses.isEmpty) {
+          if (controller.fetchedTeacherCourses.isEmpty) {
             return Center(
                 child: CircularProgressIndicator()); // Show loading spinner
           }
@@ -37,13 +45,35 @@ class TeacherCoursesScreen extends StatelessWidget {
               mainAxisSpacing: 20,
               childAspectRatio: 0.65,
             ),
-            itemCount: controller.fetchedCourses.length,
+            itemCount: controller.fetchedTeacherCourses.length,
             itemBuilder: (context, index) {
-              final course = controller.fetchedCourses[index];
-              return TeacherCourseTile(
-                title: course['title'] ?? 'No Title',
-                length: course['length'] ?? 'Unknown',
+              final course = controller.fetchedTeacherCourses[index];
+              return GestureDetector(
+                onTap: () {
+                  enrollmentsController.fetchEnrollments(course["id"]);
+                  reviewsController.fetchReviews(course["id"]);
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => TeacherCourseDetailScreen(
+                                title: course['title'],
+                                description: course['description'],
+                                price: course['price'],
+                                length: course['length'],
+                                duration: course['duration'],
+                                discount: course['discount'],
+                                certificate: course['certificate'],
+                                imageurl: course['url'],
+                                course_id: course['id'],
+                              )));
+                },
+                child: TeacherCourseTile(
+                  title: course['title'] ?? 'No Title',
+                  length: course['length'] ?? 'Unknown',
+                ),
               );
+              // : CircularProgressIndicator();
             },
           );
         }),

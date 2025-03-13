@@ -41,7 +41,8 @@ Future<File?> pickVideoFromGallery() async {
 Future<String?> uploadVideoToSupabase(File videoFile) async {
   final supabase = Supabase.instance.client;
   const uuid = Uuid();
-  final filePath = "videos/${uuid.v4()}.mp4"; // Unique file path in storage
+  final filePath =
+      "${SupabaseService.S3_BUCKET}/videos/${uuid.v4()}.mp4"; // Unique file path in storage
 
   try {
     await supabase.storage
