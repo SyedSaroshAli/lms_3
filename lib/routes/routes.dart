@@ -5,6 +5,7 @@ import 'package:lms/screens/app/navigation_screen.dart';
 import 'package:lms/screens/auth/login_screen.dart';
 import 'package:lms/screens/auth/signup_screen.dart';
 import 'package:lms/screens/onBoarding/onboarding.dart';
+import 'package:lms/screens/profile/edit_profile.dart';
 import 'package:lms/screens/teacher/addCourse_screen.dart';
 import 'package:lms/screens/teacher/addChapter_screen.dart';
 
@@ -26,5 +27,9 @@ class Routes {
       name: RoutesNamed.addChapterScreen,
       page: () => AddChapterScreen(),
     ),
+    GetPage(
+        name: RoutesNamed.editProfileScreen,
+        page: () => EditProfile(),
+        transition: Transition.rightToLeft),
   ];
 }

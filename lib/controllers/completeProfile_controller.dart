@@ -11,6 +11,7 @@ import 'package:supabase/supabase.dart';
 class CompleteProfileController extends GetxController {
   final userId = SupabaseService.client.auth.currentUser!.id;
   RxBool isLoading = false.obs;
+
   RxList<String> skills = <String>[].obs;
   RxString selectedRole = "Student".obs; // <-- Initialize with default value
   Rx<File?> image = Rx<File?>(null);

@@ -3,7 +3,7 @@ import 'package:lms/color/colors.dart';
 import 'package:lms/screens/app/home_screen.dart';
 import 'package:lms/screens/app/inbox_screen.dart';
 import 'package:lms/screens/app/myCourses_screen.dart';
-import 'package:lms/screens/app/profile_screen.dart';
+import 'package:lms/screens/profile/profile_screen.dart';
 import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
 
 class BottomNavBar extends StatefulWidget {

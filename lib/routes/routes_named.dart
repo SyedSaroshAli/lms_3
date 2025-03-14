@@ -6,4 +6,5 @@ class RoutesNamed {
   static final bottomNavBar = '/bottomNav';
   static final addCourseScreen = '/addCourse';
   static final addChapterScreen = '/addChapter';
+  static final editProfileScreen = '/editProfile';
 }

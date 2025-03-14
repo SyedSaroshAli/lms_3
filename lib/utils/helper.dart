@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/route_manager.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:lms/color/colors.dart';
 import 'package:lms/services/supabase_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -66,4 +67,13 @@ Future<File> compressImage(File file, String targetPath) async {
 
 String getS3Url(String path) {
   return "https://gpmouvocgqptokxftenk.supabase.co/storage/v1/object/public/$path";
+}
+
+String formatDate(String timestamp) {
+  try {
+    DateTime dateTime = DateTime.parse(timestamp);
+    return DateFormat("d MMMM, yyyy").format(dateTime); // "4 March, 2025"
+  } catch (e) {
+    return "Unknown Date"; // Fallback in case of parsing error
+  }
 }

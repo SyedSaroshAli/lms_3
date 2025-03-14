@@ -9,55 +9,62 @@ class EnrollmentTile extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-      decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.grey.shade400,
-            width: 1.1,
-          ),
-          borderRadius: BorderRadius.circular(14)),
-      child: Row(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(14)),
+      child: Column(
         children: [
           Row(
             children: [
-              CircleAvatar(
-                backgroundColor: Colors.black,
-                radius: 30,
-              ),
-              SizedBox(
-                width: 8,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
+              Row(
                 children: [
-                  Text(
-                    'Sarosh',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                  CircleAvatar(
+                    backgroundColor: Colors.black,
+                    radius: 30,
                   ),
-                  Text(
-                    "Student",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        color: Colors.blue),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Sarosh',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 16),
+                      ),
+                      Text(
+                        "Student",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            color: Colors.blue),
+                      ),
+                    ],
                   ),
                 ],
               ),
+              Spacer(),
+              Icon(
+                Icons.person_outline_rounded,
+                size: 20,
+                color: AppColors.buttonColor,
+              ),
+              SizedBox(
+                width: 12,
+              ),
+              Icon(
+                Icons.chat_bubble_outline,
+                size: 20,
+                color: AppColors.buttonColor,
+              )
             ],
           ),
-          Spacer(),
-          Icon(
-            Icons.person_outline_rounded,
-            size: 20,
-            color: AppColors.buttonColor,
-          ),
           SizedBox(
-            width: 12,
+            height: 10,
           ),
-          Icon(
-            Icons.chat_bubble_outline,
-            size: 20,
-            color: AppColors.buttonColor,
+          Divider(
+            thickness: 1.1,
+            color: Colors.grey.shade200,
           )
         ],
       ),

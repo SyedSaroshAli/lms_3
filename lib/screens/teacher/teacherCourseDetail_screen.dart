@@ -245,29 +245,29 @@ class TeacherCourseDetailScreen extends StatelessWidget {
             ),
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: Padding(
-          padding: EdgeInsets.only(bottom: 30),
-          child: SizedBox(
-            width: 180,
-            height: 50,
-            child: FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: AppColors.buttonColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-              ),
-              child: Text(
-                "GET ENROLL",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // floatingActionButton: Padding(
+        //   padding: EdgeInsets.only(bottom: 30),
+        //   child: SizedBox(
+        //     width: 180,
+        //     height: 50,
+        //     child: FloatingActionButton(
+        //       onPressed: () {},
+        //       backgroundColor: AppColors.buttonColor,
+        //       shape: RoundedRectangleBorder(
+        //         borderRadius: BorderRadius.circular(18),
+        //       ),
+        //       child: Text(
+        //         "GET ENROLL",
+        //         style: TextStyle(
+        //           fontSize: 14,
+        //           fontWeight: FontWeight.bold,
+        //           color: Colors.white,
+        //         ),
+        //       ),
+        //     ),
+        // ),
+        // ),
       ),
     );
   }

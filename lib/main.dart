@@ -14,7 +14,7 @@ import 'package:lms/screens/app/home_screen.dart';
 import 'package:lms/screens/app/inbox_screen.dart';
 import 'package:lms/screens/app/myCourses_screen.dart';
 import 'package:lms/screens/app/navigation_screen.dart';
-import 'package:lms/screens/app/profile_screen.dart';
+import 'package:lms/screens/profile/profile_screen.dart';
 import 'package:lms/screens/app/settings_screen.dart';
 import 'package:lms/screens/auth/completeProfile_screen.dart';
 import 'package:lms/screens/auth/reserPassDone_screen.dart';

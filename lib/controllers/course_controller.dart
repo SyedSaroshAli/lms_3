@@ -29,6 +29,7 @@ class CourseController extends GetxController {
   var videoFile = Rxn<File>();
   RxBool highestToLowest = false.obs;
   RxInt currentStep = 0.obs;
+  RxInt currentIndex = 0.obs;
   RxList fetchedCourses = [].obs;
   RxList filteredCourses = [].obs;
   RxList fetchedTeacherCourses = [].obs;
