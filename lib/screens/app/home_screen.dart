@@ -277,187 +277,408 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lms/color/colors.dart';
 import 'package:lms/controllers/course_controller.dart';
+import 'package:lms/controllers/home_controller.dart';
+import 'package:lms/routes/routes_named.dart';
+import 'package:lms/widgets/popularCoursesName_tile.dart';
+import 'package:lms/widgets/popularCourses_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+  final TextEditingController searchController = TextEditingController();
+  final CourseController courseController = CourseController();
+  final HomeController homeController = Get.put(HomeController());
+  final ScrollController scrollController = ScrollController();
 
+  final CarouselController controller = CarouselController(); // This is correct
+  final List containers = [
+    Container(
+      height: 180,
+      width: 360,
+      color: Colors.blue,
+    ),
+    Container(
+      height: 180,
+      width: 360,
+      color: Colors.red,
+    ),
+    Container(
+      height: 180,
+      width: 360,
+      color: Colors.pink,
+    )
+  ];
   @override
   Widget build(BuildContext context) {
-    final TextEditingController searchController = TextEditingController();
-    final CourseController courseController = CourseController();
-    final CarouselController controller =
-        CarouselController(); // This is correct
-    List containers = [
-      Container(
-        height: 70,
-        width: 120,
-        color: Colors.blue,
-      ),
-      Container(
-        height: 70,
-        width: 120,
-        color: Colors.red,
-      ),
-      Container(
-        height: 70,
-        width: 120,
-        color: Colors.pink,
-      )
-    ];
+    scrollController.addListener(() {
+      homeController.updateScrollPosition(scrollController.offset);
+    });
+
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
+        backgroundColor: AppColors.backgroundColor,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Hi, Alex",
-                            style: GoogleFonts.jost(
-                                fontWeight: FontWeight.w600, fontSize: 24),
-                          ),
-                          Text(
-                            'What would you like to learn Today? \nSearch Below',
-                            style: GoogleFonts.mulish(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 13,
-                                color: Color(0xff545454)),
-                          )
-                        ],
-                      ),
-                      Image.asset(
-                        'assets/notifications2.png',
-                        height: 40,
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Container(
-                    height: 60,
-                    margin: EdgeInsets.symmetric(vertical: 6),
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius:
-                          BorderRadius.circular(15), // Slight rounding
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black
-                              .withOpacity(0.1), // Light shadow color
-                          spreadRadius: 1,
-                          blurRadius: 10, // Smooth blur
-                          offset: Offset(-5, 5), // Left shadow
-                        ),
-                        BoxShadow(
-                          color: Colors.black
-                              .withOpacity(0.1), // Light shadow color
-                          spreadRadius: 1,
-                          blurRadius: 10, // Smooth blur
-                          offset: Offset(5, 5), // Right shadow
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/search.png",
-                          height: 20, // Ensure proper height
-                          width: 20,
-                          fit: BoxFit.contain,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 8, left: 10),
-                            child: TextFormField(
-                              controller: searchController,
-                              decoration: InputDecoration(
-                                hintText: "Search for..",
-                                hintStyle: GoogleFonts.mulish(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                                enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide.none),
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide.none),
-                                errorBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide.none),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Hi, Alex",
+                                    style: GoogleFonts.jost(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 24),
+                                  ),
+                                  Text(
+                                    'What would you like to learn Today? \nSearch Below',
+                                    style: GoogleFonts.mulish(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 13,
+                                        color: Color(0xff545454)),
+                                  )
+                                ],
                               ),
+                              Image.asset(
+                                'assets/notifications2.png',
+                                height: 40,
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 18,
+                          ),
+                          Container(
+                            height: 64,
+                            margin: EdgeInsets.symmetric(vertical: 6),
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                                  BorderRadius.circular(15), // Slight rounding
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black
+                                      .withOpacity(0.1), // Light shadow color
+                                  spreadRadius: 1,
+                                  blurRadius: 10, // Smooth blur
+                                  offset: Offset(-5, 5), // Left shadow
+                                ),
+                                BoxShadow(
+                                  color: Colors.black
+                                      .withOpacity(0.1), // Light shadow color
+                                  spreadRadius: 1,
+                                  blurRadius: 10, // Smooth blur
+                                  offset: Offset(5, 5), // Right shadow
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  "assets/search.png",
+                                  height: 20, // Ensure proper height
+                                  width: 20,
+                                  fit: BoxFit.contain,
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: GestureDetector(
+                                        onTap: () => Get.toNamed(
+                                            RoutesNamed.searchScreen),
+                                        child: Text(
+                                          "Search for..",
+                                          style: GoogleFonts.mulish(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                        )),
+                                  ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(13),
+                                      color: AppColors.buttonColor),
+                                  child: Center(
+                                    child: Image.asset('assets/filter.png'),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(13),
-                              color: AppColors.buttonColor),
-                          child: Center(
-                            child: Image.asset('assets/filter.png'),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CarouselSlider.builder(
-                          itemCount: containers.length,
-                          options: CarouselOptions(
-                            height: 200,
-                            autoPlay: true,
-                            enlargeCenterPage: true,
-                            aspectRatio: 16 / 9,
-                            viewportFraction: 0.8,
-                            onPageChanged: (index, reason) {
-                              courseController.currentIndex.value = index;
-                            },
-                          ),
-                          itemBuilder: (context, index, realIndex) {
-                            return ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: containers[index]);
+                        ])),
+
+                SizedBox(
+                  height: 20,
+                ),
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CarouselSlider.builder(
+                        itemCount: containers.length,
+                        options: CarouselOptions(
+                          height: 200,
+                          autoPlay: true,
+                          enlargeCenterPage: true,
+                          aspectRatio: 16 / 9,
+                          viewportFraction: 0.8,
+                          onPageChanged: (index, reason) {
+                            courseController.currentIndex.value = index;
                           },
                         ),
-                        const SizedBox(height: 16),
-                        Obx(() {
-                          return AnimatedSmoothIndicator(
-                            activeIndex: courseController.currentIndex.value,
-                            count: containers.length,
-                            effect: ExpandingDotsEffect(
-                              activeDotColor: Colors.blue,
-                              dotColor: Colors.grey.shade400,
-                              dotHeight: 8,
-                              dotWidth: 8,
+                        itemBuilder: (context, index, realIndex) {
+                          return ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: containers[index]);
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      Obx(() {
+                        return AnimatedSmoothIndicator(
+                          activeIndex: courseController.currentIndex.value,
+                          count: containers.length,
+                          effect: ExpandingDotsEffect(
+                            activeDotColor: Colors.blue,
+                            dotColor: Colors.grey.shade400,
+                            dotHeight: 8,
+                            dotWidth: 8,
+                          ),
+                          // onDotClicked: (index) {
+                          //   _controller.animateToPage(index);
+                          // },
+                        );
+                      })
+                    ]),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Categories",
+                            style: GoogleFonts.jost(
+                                fontSize: 18, fontWeight: FontWeight.w600),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(RoutesNamed.categoryScreen);
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  "SEE ALL  ",
+                                  style: GoogleFonts.mulish(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w800,
+                                      color: AppColors.buttonColor),
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  color: AppColors.buttonColor,
+                                  size: 13,
+                                )
+                              ],
                             ),
-                            // onDotClicked: (index) {
-                            //   _controller.animateToPage(index);
-                            // },
-                          );
-                        })
-                      ]) // Space between slider and indicators
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 14,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "3D Design",
+                            style: GoogleFonts.mulish(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.hintColor),
+                          ),
+                          Text(
+                            "Arts & Humanities",
+                            style: GoogleFonts.mulish(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.buttonColor),
+                          ),
+                          Text(
+                            "Graphic Design",
+                            style: GoogleFonts.mulish(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.hintColor),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 32,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Popular Courses",
+                            style: GoogleFonts.jost(
+                                fontSize: 18, fontWeight: FontWeight.w600),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "SEE ALL  ",
+                                style: GoogleFonts.mulish(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.buttonColor),
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color: AppColors.buttonColor,
+                                size: 13,
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+
+                // Space between slider and indicators
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 30,
+                      child: ListView.builder(
+                        padding: EdgeInsets.only(right: 10),
+                        itemCount: homeController.popularCourses.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return PopularCoursesNameTile(
+                              name: homeController.popularCourses[index]);
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Obx(() => AnimatedContainer(
+                          decoration: BoxDecoration(),
+                          duration: Duration(milliseconds: 300),
+                          padding: EdgeInsets.only(
+                              left: homeController.isScrolled.value ? 0 : 10),
+                          height: 240,
+                          child: ListView.builder(
+                            padding: EdgeInsets.only(right: 10),
+                            controller: scrollController,
+                            itemCount: 10,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return PopularCoursesWidget();
+                            },
+                          ),
+                        )),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Top Mentor",
+                            style: GoogleFonts.jost(
+                                fontSize: 18, fontWeight: FontWeight.w600),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "SEE ALL  ",
+                                style: GoogleFonts.mulish(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.buttonColor),
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color: AppColors.buttonColor,
+                                size: 13,
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                        height: 100,
+                        child: ListView.builder(
+                            padding: EdgeInsets.only(right: 10),
+                            itemCount: 4,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                width:
+                                    70, // Ensuring the Container has a fixed width
+                                height: 80,
+                                margin: EdgeInsets.only(right: 12),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .center, // Centers content vertically
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .center, // Centers horizontally
+                                  children: [
+                                    Container(
+                                      height: 65,
+                                      width: 70,
+                                      decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      "Alex",
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.jost(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.textColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ));
   }
 }

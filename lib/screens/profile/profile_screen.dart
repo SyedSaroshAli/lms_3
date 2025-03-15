@@ -54,7 +54,7 @@ class ProfileScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(left: 30, right: 30),
+        padding: const EdgeInsets.only(left: 20, right: 20),
         child: Stack(
           alignment: Alignment.topCenter,
           children: [

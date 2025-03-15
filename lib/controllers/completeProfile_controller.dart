@@ -27,9 +27,7 @@ class CompleteProfileController extends GetxController {
 
   void pickImage() async {
     File? file = await pickImageFromGallery();
-    if (file != null) {
-      image.value = file;
-    }
+    image.value = file;
   }
 
   Future<void> updateProfile() async {

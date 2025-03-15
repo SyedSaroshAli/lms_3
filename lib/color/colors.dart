@@ -7,4 +7,6 @@ class AppColors {
   static Color hintColor = Colors.grey[400]!;
   static Color containerColor = const Color.fromARGB(26, 0, 47, 150);
   static Color backgroundColor = const Color(0xFFF5F9FF);
+  static Color greenColor = Color(0xFF167F71);
+  static Color textColor = Color(0xFF202244);
 }

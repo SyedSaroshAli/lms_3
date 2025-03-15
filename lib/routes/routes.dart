@@ -1,7 +1,9 @@
 import 'package:get/route_manager.dart';
 import 'package:lms/routes/routes_named.dart';
+import 'package:lms/screens/app/category_screen.dart';
 import 'package:lms/screens/app/home_screen.dart';
 import 'package:lms/screens/app/navigation_screen.dart';
+import 'package:lms/screens/app/search_screen.dart';
 import 'package:lms/screens/auth/login_screen.dart';
 import 'package:lms/screens/auth/signup_screen.dart';
 import 'package:lms/screens/onBoarding/onboarding.dart';
@@ -31,5 +33,14 @@ class Routes {
         name: RoutesNamed.editProfileScreen,
         page: () => EditProfile(),
         transition: Transition.rightToLeft),
+    GetPage(
+        name: RoutesNamed.categoryScreen,
+        page: () => CategoryScreen(),
+        transition: Transition.rightToLeft),
+    GetPage(
+      name: RoutesNamed.searchScreen,
+      page: () => SearchScreen(),
+      transition: Transition.rightToLeft,
+    ),
   ];
 }

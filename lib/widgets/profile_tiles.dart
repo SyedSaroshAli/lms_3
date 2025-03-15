@@ -9,12 +9,16 @@ class ProfileTiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.symmetric(vertical: 11),
       child: Row(
         children: [
-          Image.asset(
-            imageAsset,
-            height: 20,
+          SizedBox(
+            height: imageAsset == "assets/darkMode.png" ? 16 : 20,
+            width: 20,
+            child: Image.asset(
+              imageAsset,
+              height: 20,
+            ),
           ),
           SizedBox(
             width: 15,

@@ -42,6 +42,9 @@ void main() async {
       anonKey:
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwbW91dm9jZ3FwdG9reGZ0ZW5rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA5ODkwODksImV4cCI6MjA1NjU2NTA4OX0.VttjpE-E9wqQt_D7jc9SNiYvZvZtihof-0QJ18HEj_c",
       url: "https://gpmouvocgqptokxftenk.supabase.co");
+
+  await Future.delayed(
+      Duration(seconds: 2)); // Give Supabase time to initialize
   Get.put(SupabaseService());
   Get.put(CourseController());
   Get.put(ReviewsController());
